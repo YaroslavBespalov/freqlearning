@@ -9,7 +9,15 @@ Available conversions in the frequency spectrum:
 Example:
 ```
 from freqlearning import LinearFourier2d
+from freqlearning import GeneralFourier2d
 ```
+
+### PyPI version:
+
+$ pip install freqlearning
+Latest version from source:
+
+$ pip install git+https://github.com/YaroslavBespalov/freqlearning/freqlearning
 
 ### Requirements
 Installing requirements by pip:
