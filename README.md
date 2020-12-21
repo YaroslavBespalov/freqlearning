@@ -21,4 +21,9 @@ $ pip install git+https://github.com/YaroslavBespalov/freqlearning/freqlearning
 
 ### Requirements
 Installing requirements by pip:
-```pip3 install --upgrade -r ./requirements.txt```
+```
+pip3 install --upgrade -r ./requirements.txt
+```
+
+### Contributors
+- Yaroslav Bespalov & Viktor Shipitsin.
