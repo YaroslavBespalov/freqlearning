@@ -1,6 +1,4 @@
 import torch
-import numpy as np
-
 
 class LinearFourier2d(torch.nn.Module):
     def __init__(self, image_size, log=False):
@@ -15,7 +13,8 @@ class LinearFourier2d(torch.nn.Module):
     def forward(self, x):
         w = torch.nn.ReLU()(self.fourier_filter.repeat(x.shape[0], 1, 1, 1).to(x.device))
 
-        rft_x = torch.rfft(x, signal_ndim=3, normalized=True, onesided=True)
+        rft_x = torch.view_as_real(torch.fft.rfftn(x, dim=(1, 2, 3), norm='forward'))
+
         init_spectrum = torch.sqrt(torch.pow(rft_x[..., 0], 2) + torch.pow(rft_x[..., 1], 2))
 
         if self.log:
@@ -23,9 +22,9 @@ class LinearFourier2d(torch.nn.Module):
         else:
             spectrum = w * init_spectrum
 
-        irf = torch.irfft(torch.stack([rft_x[..., 0] * spectrum / (init_spectrum + 1e-16),
-                                       rft_x[..., 1] * spectrum / (init_spectrum + 1e-16)], dim=-1),
-                          signal_ndim=3, normalized=True, onesided=True, signal_sizes=x.shape[1:])
+        irf = torch.fft.irfftn(torch.view_as_complex(torch.stack([rft_x[..., 0] * spectrum / (init_spectrum + 1e-16),
+                                           rft_x[..., 1] * spectrum / (init_spectrum + 1e-16)], dim=-1)),
+                              norm='forward', s=x.shape[1:])
 
         return irf
 
@@ -56,7 +55,7 @@ class GeneralFourier2d(torch.nn.Module):
         b1 = torch.nn.ReLU()(self.B1.repeat(x.shape[0], 1, 1, 1).to(x.device))
         b2 = torch.nn.ReLU()(self.B2.repeat(x.shape[0], 1, 1, 1).to(x.device))
 
-        rft_x = torch.rfft(x, signal_ndim=3, normalized=True, onesided=True)
+        rft_x = torch.view_as_real(torch.fft.rfftn(x, dim=(1,2,3), norm='forward'))
         init_spectrum = torch.sqrt(torch.pow(rft_x[..., 0], 2) + torch.pow(rft_x[..., 1], 2))
 
         if self.log:
@@ -64,8 +63,8 @@ class GeneralFourier2d(torch.nn.Module):
         else:
             spectrum = w2 * self.activation(w1 * init_spectrum + b1) + b2
 
-        irf = torch.irfft(torch.stack([rft_x[..., 0] * spectrum / (init_spectrum + 1e-16),
-                                       rft_x[..., 1] * spectrum / (init_spectrum + 1e-16)], dim=-1),
-                          signal_ndim=3, normalized=True, onesided=True, signal_sizes=x.shape[1:])
+        irf = torch.fft.irfftn(torch.view_as_complex(torch.stack([rft_x[..., 0] * spectrum / (init_spectrum + 1e-16),
+                                           rft_x[..., 1] * spectrum / (init_spectrum + 1e-16)], dim=-1)),
+                              norm='forward', s=x.shape[1:])
 
         return irf
