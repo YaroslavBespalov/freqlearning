@@ -15,6 +15,7 @@ from freqlearning import GeneralFourier2d
 ### PyPI version:
 
 $ pip install freqlearning
+
 Latest version from source:
 
 $ pip install git+https://github.com/YaroslavBespalov/freqlearning/freqlearning

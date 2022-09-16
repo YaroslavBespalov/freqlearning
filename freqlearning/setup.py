@@ -1,8 +1,8 @@
 from setuptools import setup
 
 setup(name='freqlearning',
-      version='0.01',
-      description='frequency domain learning',
+      version='0.03',
+      description='frequency domain learning, GAFL',
       packages=['freqlearning'],
       url='https://github.com/YaroslavBespalov/freqlearning',
       author='YaroslavBespalov, ViktorShipitsin',
