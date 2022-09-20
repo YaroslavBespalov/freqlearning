@@ -8,8 +8,23 @@ Available conversions in the frequency spectrum:
 ## Usage
 Example:
 ```
+import torch
+import torch.nn as nn
+
 from freqlearning import LinearFourier2d
 from freqlearning import GeneralFourier2d
+
+
+input_image = torch.randn(1, 256, 256) # input shape (1, 256, 256)
+
+model = MyModel()
+#gafl_layer = LinearFourier2d((1, 256, 256))
+gafl_layer = GeneralFourier2d((1, 256, 256))
+
+gafl_model = nn.Sequential(
+    gafl_layer,
+    model
+)
 ```
 
 ### PyPI version:
